@@ -10,5 +10,5 @@
 
 - Lauro
 - Matheus Barbosa
-- Samuel Teodoro Moreira Dias
 - Renan Alexandre Maciel Couto
+- Samuel Teodoro Moreira Dias
