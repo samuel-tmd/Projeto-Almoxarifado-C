@@ -3,9 +3,10 @@
 #include <string.h>
 #include <ctype.h>
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+/* Este projeto tem o propósito realizar um programa para o setor de Almoxarifado de uma empresa, realizando cadastro de produtos, atualização de registros, vizualização de produtos com pouca quantidade disponível para uso e vizualização de todos os produtos, armazenando os dados em um arquivo .csv*/
 
-typedef struct produto {
+typedef struct produto 
+{
 	 char nome[30];
 	 int codigo;
 	 int quant_atual;
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 	
 	do
 	{
-		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Cadastrar Uso.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
+		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Cadastrar Uso/Adicao.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
 		scanf("%c", &selecao);
 		while(isdigit(selecao) == 0)
 		{
@@ -30,13 +31,12 @@ int main(int argc, char *argv[])
 			printf("\nPor favor digite a opcao novamente: ");
 			scanf("%c", &selecao);	
 		}
-		
 		iSelecao = selecao - '0';
 		
 		arquivo = fopen("produtos.csv", "r");
 		if(arquivo == NULL)
 		{
-			printf("Erro ao tentar encontrar o arquivo Produtos.csv! Por favor contate um desenvolvedor\n\n");
+			printf("Erro ao tentar encontrar o arquivo produtos.csv! Por favor contate um desenvolvedor.\n\n");
 			break;
 		}
 		else 
@@ -53,13 +53,14 @@ int main(int argc, char *argv[])
 			
 		if(iSelecao == 1)
 		{
+			//1- Cadastrar novo Produto.
 			printf("Escolha: %i\n\n", iSelecao);
 			while (iSelecao2 != 2)
 			{
 				arquivo = fopen("produtos.csv", "a");
 				if(arquivo == NULL)
 				{
-					printf("Erro na abertura de Arquivo! Voltando ao Menu Principal...\n\n");
+					printf("Erro ao tentar encontrar o arquivo produtos.csv! Por favor contate um desenvolvedor.\n\n");
 					break;
 				} 
 				else 
@@ -102,21 +103,25 @@ int main(int argc, char *argv[])
 		} 
 		else if(iSelecao == 2)
 		{
+			//2- Cadastrar Uso/Adicao.
 			printf("\nEscolha: %i\n\n", iSelecao);
 			printf("Voltando ao Menu Principal!\n\n");
 		} 
 		else if(iSelecao == 3)
 		{
+			//3- Visualizar Todos os Produtos.
 			printf("\nEscolha: %i\n\n", iSelecao);
 			printf("Voltando ao Menu Principal!\n\n");
 		} 
 		else if(iSelecao == 4)
 		{
+			//4- Visualizar Produto em Falta.
 			printf("\nEscolha: %i\n\n", iSelecao);
 			printf("Voltando ao Menu Principal!\n\n");
 		} 
 		else if(iSelecao == 5)
 		{
+			//5- Sair.
 			printf("\nEscolha: %i\n\n", iSelecao);
 		} 
 		else 
