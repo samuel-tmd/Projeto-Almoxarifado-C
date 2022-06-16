@@ -15,130 +15,119 @@ typedef struct produto {
 
 int main(int argc, char *argv[]) 
 {
-	int i, j, linhas;
+	int i, j, proxCodigo, iSelecao=0, iSelecao2 = 0;
 	FILE *arquivo;
-	char virgula[1] = ",",conta, final[150], temp[3], letra = "\n", selecao = "0", selecao2 = "0";
-
+	char selecao = 'a', selecao2 = 'a';
+	
 	do
 	{
-		label:
 		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Cadastrar Uso.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
 		scanf("%c", &selecao);
-		
-		if(!isdigit(selecao)){
-			printf("Nop");
+		while(isdigit(selecao) == 0)
+		{
+			fflush(stdin);
+			printf("Escolha: %c", selecao);
+			printf("\nPor favor digite a opcao novamente: ");
+			scanf("%c", &selecao);	
 		}
 		
-		if(selecao != 5)
+		iSelecao = selecao - '0';
+		
+		arquivo = fopen("produtos.csv", "r");
+		if(arquivo == NULL)
 		{
-			arquivo = fopen("produtos.csv", "r");
-			if(arquivo == NULL)
-			{
-				printf("Erro ao tentar encontrar o arquivo Produtos.csv! Por favor contate um desenvolvedor\n\n");
-				break;
-			}
-			else 
-			{
-				while((conta=fgetc(arquivo))!=EOF)
-				{
-			        if(conta=='\n')
-					{
-			        	linhas++;
-			        }
-			    }
-			}
-			fclose(arquivo);
-			
-			if(linhas==1)
-			{
-				arquivo = fopen("produtos.csv", "w");
-				if(arquivo == NULL)
-				{
-					printf("Erro ao tentar encontrar o arquivo Produtos.csv! Por favor contate um desenvolvedor\n\n");
-					break;	
-				} 
-				else 
-				{
-					fprintf(arquivo, "Nome, Codigo, Quantidade Atual, Quantidade Maxima, Quantidade Minima\n");
-					fclose(arquivo);
-				}
-			}
-			
-			if(selecao == 1)
-			{
-				while (selecao2 != 2)
-				{
-					printf("\n1\n\n");
-					arquivo = fopen("produtos.csv", "a");
-					if(arquivo == NULL)
-					{
-						printf("Erro na abertura de Arquivo! Voltando ao Menu Principal...\n\n");
-						break;
-					} 
-					else 
-					{
-						prod produto;												
-						printf("Digite o Nome do produto: ");
-						fflush(stdin);
-						gets(produto.nome);						
-						printf("Digite a Quantidade Atual do produto: ");
-						fflush(stdin);
-						scanf("%i",&produto.quant_atual);				
-						printf("Digite a Quantidade Maxima do produto: ");
-						fflush(stdin);
-						scanf("%i",&produto.quant_max);								
-						printf("Digite a Quantidade Minima do produto: ");
-						fflush(stdin);
-						scanf("%i",&produto.quant_min);
-						fflush(stdin);
-						
-						strcpy(final,produto.nome);			
-						strcat(final, virgula);						
-						sprintf(temp, "%i", produto.quant_atual);
-						strcat(final, temp);
-						strcat(final, virgula);						
-						sprintf(temp, "%i", produto.quant_max);
-						strcat(final, temp);
-						strcat(final, virgula);						
-						sprintf(temp, "%i", produto.quant_min);
-						strcat(final,temp);
-						strcat(final,"\n");
-						printf("%s\n", final);
-						
-						fprintf(arquivo, final);
-						fclose(arquivo);						
-						printf("Deseja Cadastrar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
-						scanf("%i", &selecao2);
-					}			
-				}
-			} 
-			else if(selecao == 2)
-			{
-				printf("\n2\n\n");
-				printf("Voltando ao Menu Principal!\n\n");
-			} 
-			else if(selecao == 3)
-			{
-				printf("\n3\n\n");
-				printf("Voltando ao Menu Principal!\n\n");
-			} 
-			else if(selecao == 4)
-			{
-				printf("\n4\n\n");
-				printf("Voltando ao Menu Principal!\n\n");
-			} 
-			else 
-			{
-				printf("\nPor favor digite a opção novamente: ");
-				scanf("%i", &selecao);
-			}
+			printf("Erro ao tentar encontrar o arquivo Produtos.csv! Por favor contate um desenvolvedor\n\n");
+			break;
 		}
 		else 
 		{
-			printf("\nObrigado por utilizar nosso programa!\n");
+			prod a1;
+			proxCodigo=0;
+			while(fread(&a1, sizeof(prod), 1, arquivo) == 1) 
+			{		
+				proxCodigo = proxCodigo + 1;
+			}
+			proxCodigo++;
+		}
+		fclose(arquivo);
+			
+		if(iSelecao == 1)
+		{
+			printf("Escolha: %i\n\n", iSelecao);
+			while (iSelecao2 != 2)
+			{
+				arquivo = fopen("produtos.csv", "a");
+				if(arquivo == NULL)
+				{
+					printf("Erro na abertura de Arquivo! Voltando ao Menu Principal...\n\n");
+					break;
+				} 
+				else 
+				{
+					prod produto[1];												
+					printf("Digite o Nome do produto: ");
+					fflush(stdin);
+					gets(produto[0].nome);						
+					printf("Digite a Quantidade Atual do produto: ");
+					fflush(stdin);
+					scanf("%i",&produto[0].quant_atual);				
+					printf("Digite a Quantidade Maxima do produto: ");
+					fflush(stdin);
+					scanf("%i",&produto[0].quant_max);								
+					printf("Digite a Quantidade Minima do produto: ");
+					fflush(stdin);
+					scanf("%i",&produto[0].quant_min);
+					fflush(stdin);
+					produto[0].codigo = proxCodigo;
+					
+					fwrite(produto, sizeof(prod), 1, arquivo);
+					proxCodigo++;	
+										
+					printf("Deseja Cadastrar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
+					scanf("%c", &selecao2);
+					while(isdigit(selecao2) == 0 || (isdigit(selecao2) != 0 && (selecao2 != '1' && selecao2 != '2')))
+					{					
+						printf("\n\nisdigit: %i\n", isdigit(selecao2));
+						fflush(stdin);
+						printf("Escolha: %c\n", selecao2);
+						printf("\nPor favor digite uma opcao valida: ");
+						scanf("%c", &selecao2);	
+					}
+					iSelecao2 = selecao2 - '0';
+					printf("Escolha: %i\n", iSelecao2);
+				}			
+			}
+			printf("\nVoltando ao Menu Principal!\n\n");
+			fclose(arquivo);
+		} 
+		else if(iSelecao == 2)
+		{
+			printf("\nEscolha: %i\n\n", iSelecao);
+			printf("Voltando ao Menu Principal!\n\n");
+		} 
+		else if(iSelecao == 3)
+		{
+			printf("\nEscolha: %i\n\n", iSelecao);
+			printf("Voltando ao Menu Principal!\n\n");
+		} 
+		else if(iSelecao == 4)
+		{
+			printf("\nEscolha: %i\n\n", iSelecao);
+			printf("Voltando ao Menu Principal!\n\n");
+		} 
+		else if(iSelecao == 5)
+		{
+			printf("\nEscolha: %i\n\n", iSelecao);
+		} 
+		else 
+		{
+			printf("\nPor favor digite uma opcao valida: ");
+			selecao = 'a';				
 		}
 	}
-	while(selecao != 5);
+	while(iSelecao != 5);
 		
+	printf("\nObrigado por utilizar nosso programa!\n");
+	
 	return 0;
 }
