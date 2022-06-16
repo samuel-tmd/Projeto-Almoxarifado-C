@@ -4,8 +4,7 @@
 
 ## Conteúdo do Repositório:
 
-- Arquivo do Projeto DEV-C++.
-    Este projeto tem o propósito realizar um programa para o setor de Almoxarifado de uma empresa, realizando cadastro de produtos, atualização de registros, vizualização de produtos com pouca quantidade disponível para uso e vizualização de todos os produtos, armazenando os dados em um arquivo .csv.
+- Arquivo de Projeto DEV-C++ - Este projeto tem o propósito realizar um programa para o setor de Almoxarifado de uma empresa, realizando cadastro de produtos, atualização de registros, vizualização de produtos com pouca quantidade disponível para uso e vizualização de todos os produtos, armazenando os dados em um arquivo .csv.
 ## Integrantes:
 
 - Lauro
