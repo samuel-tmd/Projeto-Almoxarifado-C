@@ -32,35 +32,44 @@ int main(int argc, char *argv[])
 			scanf("%c", &selecao);	
 		}
 		iSelecao = selecao - '0';
-		
-		arquivo = fopen("produtos.csv", "r");
+		proxCodigo=0;
+		arquivo = fopen("produtos.txt", "r");
 		if(arquivo == NULL)
 		{
-			printf("Erro ao tentar encontrar o arquivo produtos.csv! Por favor contate um desenvolvedor.\n\n");
-			break;
+			printf("Arquivo não encontrado! O arquivo produtos.txt está sendo criado.\n\n");
+			arquivo = fopen("produtos.txt", "w");
+			if(arquivo == NULL) 
+			{
+				printf("Erro ao criar o arquivo! Por favor contate um desenvolvedor.\n\n");
+				break;
+			} 
+			else 
+			{
+				proxCodigo++;
+				fclose(arquivo);
+			}
 		}
 		else 
 		{
 			prod a1;
-			proxCodigo=0;
 			while(fread(&a1, sizeof(prod), 1, arquivo) == 1) 
 			{		
 				proxCodigo = proxCodigo + 1;
 			}
 			proxCodigo++;
 		}
-		fclose(arquivo);
-			
+		fclose(arquivo);	
+		
 		if(iSelecao == 1)
 		{
 			//1- Cadastrar novo Produto.
 			printf("Escolha: %i\n\n", iSelecao);
 			while (iSelecao2 != 2)
 			{
-				arquivo = fopen("produtos.csv", "a");
+				arquivo = fopen("produtos.txt", "a");
 				if(arquivo == NULL)
 				{
-					printf("Erro ao tentar encontrar o arquivo produtos.csv! Por favor contate um desenvolvedor.\n\n");
+					printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
 					break;
 				} 
 				else 
@@ -101,33 +110,53 @@ int main(int argc, char *argv[])
 			printf("\nVoltando ao Menu Principal!\n\n");
 			fclose(arquivo);
 		} 
-		else if(iSelecao == 2)
-		{
-			//2- Cadastrar Uso/Adicao.
-			printf("\nEscolha: %i\n\n", iSelecao);
-			printf("Voltando ao Menu Principal!\n\n");
-		} 
-		else if(iSelecao == 3)
-		{
-			//3- Visualizar Todos os Produtos.
-			printf("\nEscolha: %i\n\n", iSelecao);
-			printf("Voltando ao Menu Principal!\n\n");
-		} 
-		else if(iSelecao == 4)
-		{
-			//4- Visualizar Produto em Falta.
-			printf("\nEscolha: %i\n\n", iSelecao);
-			printf("Voltando ao Menu Principal!\n\n");
-		} 
-		else if(iSelecao == 5)
-		{
-			//5- Sair.
-			printf("\nEscolha: %i\n\n", iSelecao);
-		} 
 		else 
 		{
-			printf("\nPor favor digite uma opcao valida: ");
-			selecao = 'a';				
+			if(iSelecao == 2 || iSelecao == 3)
+			{
+				//2- Cadastrar Uso/Adicao - Vizualizar todos os produtos				
+				printf("\nEscolha: %i\n\n", iSelecao);
+				arquivo = fopen("produtos.txt", "r");
+				if(arquivo == NULL)
+				{
+					printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
+					break;
+				}
+				else 
+				{
+					printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+					prod a1;
+					prod v[(proxCodigo-1)];
+					fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
+					for(i=0; i<(proxCodigo-1); i++)
+					{
+						printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
+					}
+				}
+				printf("\n");
+				fclose(arquivo);
+				if (iSelecao == 2) 
+				{
+					
+				} 
+				printf("\nVoltando ao Menu Principal!\n\n");
+			} 
+			else if(iSelecao == 4)
+			{
+				//4- Visualizar Produto em Falta.
+				printf("\nEscolha: %i\n\n", iSelecao);
+				printf("Voltando ao Menu Principal!\n\n");
+			} 
+			else if(iSelecao == 5)
+			{
+				//5- Sair.
+				printf("\nEscolha: %i\n\n", iSelecao);
+			} 
+			else 
+			{
+				printf("\nPor favor digite uma opcao valida: ");
+				selecao = 'a';				
+			}
 		}
 	}
 	while(iSelecao != 5);
