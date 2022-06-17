@@ -16,9 +16,9 @@ typedef struct produto
 
 int main(int argc, char *argv[]) 
 {
-	int i, j, proxCodigo, iSelecao=0, iSelecao2 = 0;
+	int i, j, proxCodigo, iCodigo=0, iSelecao=0, iSelecao2 = 0, iSelecao3 = 0, codigoValido = 0;
 	FILE *arquivo;
-	char selecao = 'a', selecao2 = 'a';
+	char selecao = 'a', selecao2 = 'a', codigo = 'a', selecao3 = 'a';
 	
 	do
 	{
@@ -96,15 +96,13 @@ int main(int argc, char *argv[])
 					printf("Deseja Cadastrar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
 					scanf("%c", &selecao2);
 					while(isdigit(selecao2) == 0 || (isdigit(selecao2) != 0 && (selecao2 != '1' && selecao2 != '2')))
-					{					
-						printf("\n\nisdigit: %i\n", isdigit(selecao2));
+					{
 						fflush(stdin);
-						printf("Escolha: %c\n", selecao2);
 						printf("\nPor favor digite uma opcao valida: ");
-						scanf("%c", &selecao2);	
+						scanf("%c", &selecao2);
+						printf("Escolha: %c\n", selecao2);
 					}
 					iSelecao2 = selecao2 - '0';
-					printf("Escolha: %i\n", iSelecao2);
 				}			
 			}
 			printf("\nVoltando ao Menu Principal!\n\n");
@@ -114,8 +112,9 @@ int main(int argc, char *argv[])
 		{
 			if(iSelecao == 2 || iSelecao == 3)
 			{
-				//2- Cadastrar Uso/Adicao - Vizualizar todos os produtos				
+				//2- Cadastrar Uso/Adicao || Vizualizar todos os produtos				
 				printf("\nEscolha: %i\n\n", iSelecao);
+				prod v[(proxCodigo-1)];
 				arquivo = fopen("produtos.txt", "r");
 				if(arquivo == NULL)
 				{
@@ -125,8 +124,6 @@ int main(int argc, char *argv[])
 				else 
 				{
 					printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
-					prod a1;
-					prod v[(proxCodigo-1)];
 					fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
 					for(i=0; i<(proxCodigo-1); i++)
 					{
@@ -137,8 +134,60 @@ int main(int argc, char *argv[])
 				fclose(arquivo);
 				if (iSelecao == 2) 
 				{
-					
-				} 
+					while (iSelecao3 != 2)
+					{			
+						fflush(stdin);
+						printf("Digite o numero de Id do produto que deseja atualizar: ");
+						scanf("%c", &codigo);
+						while(codigoValido == 0)
+						{
+							while(isdigit(codigo) == 0)
+							{	
+								fflush(stdin);
+								printf("\nPor favor digite um Id valido: ");
+								scanf("%c", &codigo);
+								printf("Escolha: %c\n", codigo);	
+							}
+							iCodigo = codigo - '0';
+							if(iCodigo <= 0 || iCodigo > (proxCodigo-1)) 
+							{
+								printf("\nNao existe um produto com esse Id!\n");
+								iCodigo = 0;
+								codigo = 'a';
+							} 
+							else 
+							{
+								printf("\n\n\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+								printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[(iCodigo-1)].codigo, v[(iCodigo-1)].nome, v[(iCodigo-1)].quant_atual, v[(iCodigo-1)].quant_max, v[(iCodigo-1)].quant_min);
+								
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								// inserir atualização de produto
+								
+								codigoValido = 1;
+							}
+						}
+						fflush(stdin);
+						printf("Deseja atualizar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
+						scanf("%c", &selecao3);
+						while(isdigit(selecao3) == 0 || (isdigit(selecao3) != 0 && (selecao3 != '1' && selecao3 != '2')))
+						{
+							fflush(stdin);
+							printf("\nPor favor digite uma opcao valida: ");
+							scanf("%c", &selecao3);	
+							printf("Escolha: %c\n", selecao3);
+						}
+						iSelecao3 = selecao3 - '0';
+						if(iSelecao3 == 1) codigoValido = 0;
+					}
+				}
 				printf("\nVoltando ao Menu Principal!\n\n");
 			} 
 			else if(iSelecao == 4)
