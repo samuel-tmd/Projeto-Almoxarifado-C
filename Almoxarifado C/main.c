@@ -14,6 +14,38 @@ typedef struct produto
 	 int quant_min;
 } prod;
 
+void cadastrarProduto(int proxCodigo) 
+{
+	FILE *arquivo;
+	prod produto[1];
+													
+	printf("Digite o Nome do produto: ");
+	fflush(stdin);
+	gets(produto[0].nome);						
+	printf("Digite a Quantidade Atual do produto: ");
+	fflush(stdin);
+	scanf("%i",&produto[0].quant_atual);				
+	printf("Digite a Quantidade Maxima do produto: ");
+	fflush(stdin);
+	scanf("%i",&produto[0].quant_max);								
+	printf("Digite a Quantidade Minima do produto: ");
+	fflush(stdin);
+	scanf("%i",&produto[0].quant_min);
+	fflush(stdin);
+	produto[0].codigo = proxCodigo;
+	
+	arquivo = fopen("produtos.txt", "a");
+	if(arquivo == NULL)
+	{
+		printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
+	} 
+	else 
+	{
+		fwrite(produto, sizeof(prod), 1, arquivo);
+	}
+	fclose(arquivo);
+}
+
 int main(int argc, char *argv[]) 
 {
 	int i, j, proxCodigo, iCodigo=0, iSelecao=0, iSelecao2 = 0, iSelecao3 = 0, codigoValido = 0, emFalta;
@@ -64,34 +96,10 @@ int main(int argc, char *argv[])
 		if(iSelecao == 1)
 		{
 			//1- Cadastrar novo Produto.
-			printf("Escolha: %i\n\n", iSelecao);
+			printf("\nEscolha: %i\n\n", iSelecao);
 			while (iSelecao2 != 2)
 			{
-				arquivo = fopen("produtos.txt", "a");
-				if(arquivo == NULL)
-				{
-					printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
-					break;
-				} 
-				else 
-				{
-					prod produto[1];												
-					printf("Digite o Nome do produto: ");
-					fflush(stdin);
-					gets(produto[0].nome);						
-					printf("Digite a Quantidade Atual do produto: ");
-					fflush(stdin);
-					scanf("%i",&produto[0].quant_atual);				
-					printf("Digite a Quantidade Maxima do produto: ");
-					fflush(stdin);
-					scanf("%i",&produto[0].quant_max);								
-					printf("Digite a Quantidade Minima do produto: ");
-					fflush(stdin);
-					scanf("%i",&produto[0].quant_min);
-					fflush(stdin);
-					produto[0].codigo = proxCodigo;
-					
-					fwrite(produto, sizeof(prod), 1, arquivo);
+					cadastrarProduto(proxCodigo);
 					proxCodigo++;	
 										
 					printf("Deseja Cadastrar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
@@ -104,10 +112,8 @@ int main(int argc, char *argv[])
 						printf("Escolha: %c\n", selecao2);
 					}
 					iSelecao2 = selecao2 - '0';
-				}			
 			}
 			printf("\nVoltando ao Menu Principal!\n\n");
-			fclose(arquivo);
 		} 
 		else 
 		{
@@ -197,14 +203,14 @@ int main(int argc, char *argv[])
 				emFalta = 0;
 				for(i=0; i<(proxCodigo-1); i++)
 				{
-					if(v[i].quant_atual<=v[i].quant_min){
-						if(emFalta==0) printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+					if(v[i].quant_atual<=v[i].quant_min)
+					{
 						printf("O produto %s, de Id: %i esta acabando!\n", v[i].nome, v[i].codigo);
 						emFalta++;
 					}
 				}
 				if(emFalta<=0) printf("Nao existem produtos com a quantidade atual menor do que a quantidade minima!\n\n");
-				printf("Voltando ao Menu Principal!\n\n");
+				printf("\nVoltando ao Menu Principal!\n\n");
 			} 
 			else if(iSelecao == 5)
 			{
