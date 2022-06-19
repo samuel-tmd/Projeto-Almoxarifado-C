@@ -121,10 +121,6 @@ int main(int argc, char *argv[])
 			{
 				printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
 				fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
-				for(i=0; i<(proxCodigo-1); i++)
-				{
-					printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
-				}
 			}
 			printf("\n");
 			fclose(arquivo);
@@ -134,6 +130,10 @@ int main(int argc, char *argv[])
 				printf("\nEscolha: %i\n\n", iSelecao);	
 				if (iSelecao == 2) 
 				{
+					for(i=0; i<(proxCodigo-1); i++)
+					{
+						printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
+					}
 					while (iSelecao3 != 2)
 					{			
 						fflush(stdin);
