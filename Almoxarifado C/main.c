@@ -110,28 +110,28 @@ int main(int argc, char *argv[])
 		} 
 		else 
 		{
+			prod v[(proxCodigo-1)];
+			arquivo = fopen("produtos.txt", "r");
+			if(arquivo == NULL)
+			{
+				printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
+				break;
+			}
+			else 
+			{
+				printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+				fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
+				for(i=0; i<(proxCodigo-1); i++)
+				{
+					printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
+				}
+			}
+			printf("\n");
+			fclose(arquivo);
 			if(iSelecao == 2 || iSelecao == 3)
 			{
 				//2- Cadastrar Uso/Adicao || Vizualizar todos os produtos				
-				printf("\nEscolha: %i\n\n", iSelecao);
-				prod v[(proxCodigo-1)];
-				arquivo = fopen("produtos.txt", "r");
-				if(arquivo == NULL)
-				{
-					printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
-					break;
-				}
-				else 
-				{
-					printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
-					fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
-					for(i=0; i<(proxCodigo-1); i++)
-					{
-						printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
-					}
-				}
-				printf("\n");
-				fclose(arquivo);
+				printf("\nEscolha: %i\n\n", iSelecao);	
 				if (iSelecao == 2) 
 				{
 					while (iSelecao3 != 2)
