@@ -16,19 +16,20 @@ typedef struct produto
 
 int main(int argc, char *argv[]) 
 {
-	int i, j, proxCodigo, iCodigo=0, iSelecao=0, iSelecao2 = 0, iSelecao3 = 0, codigoValido = 0;
+	int i, j, proxCodigo, iCodigo=0, iSelecao=0, iSelecao2 = 0, iSelecao3 = 0, codigoValido = 0, emFalta;
 	FILE *arquivo;
 	char selecao = 'a', selecao2 = 'a', codigo = 'a', selecao3 = 'a';
 	
 	do
 	{
+		fflush(stdin);
 		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Cadastrar Uso/Adicao.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
 		scanf("%c", &selecao);
 		while(isdigit(selecao) == 0)
 		{
 			fflush(stdin);
 			printf("Escolha: %c", selecao);
-			printf("\nPor favor digite a opcao novamente: ");
+			printf("\nPor favor digite uma opcao valida: ");
 			scanf("%c", &selecao);	
 		}
 		iSelecao = selecao - '0';
@@ -119,21 +120,20 @@ int main(int argc, char *argv[])
 			}
 			else 
 			{
-				printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
 				fread(&v, sizeof(prod), (proxCodigo-1), arquivo);
 			}
-			printf("\n");
 			fclose(arquivo);
 			if(iSelecao == 2 || iSelecao == 3)
 			{
 				//2- Cadastrar Uso/Adicao || Vizualizar todos os produtos				
-				printf("\nEscolha: %i\n\n", iSelecao);	
+				printf("\nEscolha: %i\n\n", iSelecao);
+				printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+				for(i=0; i<(proxCodigo-1); i++)
+				{
+					printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
+				}	
 				if (iSelecao == 2) 
 				{
-					for(i=0; i<(proxCodigo-1); i++)
-					{
-						printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[i].codigo, v[i].nome, v[i].quant_atual, v[i].quant_max, v[i].quant_min);
-					}
 					while (iSelecao3 != 2)
 					{			
 						fflush(stdin);
@@ -194,6 +194,16 @@ int main(int argc, char *argv[])
 			{
 				//4- Visualizar Produto em Falta.
 				printf("\nEscolha: %i\n\n", iSelecao);
+				emFalta = 0;
+				for(i=0; i<(proxCodigo-1); i++)
+				{
+					if(v[i].quant_atual<=v[i].quant_min){
+						if(emFalta==0) printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+						printf("O produto %s, de Id: %i esta acabando!\n", v[i].nome, v[i].codigo);
+						emFalta++;
+					}
+				}
+				if(emFalta<=0) printf("Nao existem produtos com a quantidade atual menor do que a quantidade minima!\n\n");
 				printf("Voltando ao Menu Principal!\n\n");
 			} 
 			else if(iSelecao == 5)
@@ -203,14 +213,14 @@ int main(int argc, char *argv[])
 			} 
 			else 
 			{
-				printf("\nPor favor digite uma opcao valida: ");
+				printf("\nPor favor digite uma opcao valida!\n\n");
 				selecao = 'a';				
 			}
 		}
 	}
 	while(iSelecao != 5);
 		
-	printf("\nObrigado por utilizar nosso programa!\n");
+	printf("Obrigado por utilizar nosso programa!\n");
 	
 	return 0;
 }
