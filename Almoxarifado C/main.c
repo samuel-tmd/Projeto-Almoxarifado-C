@@ -3,7 +3,11 @@
 #include <string.h>
 #include <ctype.h>
 
-/* Este projeto tem o propósito realizar um programa para o setor de Almoxarifado de uma empresa, realizando cadastro de produtos, atualização de registros, vizualização de produtos com pouca quantidade disponível para uso e vizualização de todos os produtos, armazenando os dados em um arquivo .csv*/
+/* 
+	Este projeto tem o propósito realizar um programa para o setor de Almoxarifado de uma empresa, 
+	realizando cadastro de produtos, atualização de registros, vizualização de produtos com pouca quantidade disponível para uso e vizualização de todos os produtos 
+	e por fim armazenando os dados em um arquivo .txt
+*/
 
 typedef struct produto 
 {
@@ -13,6 +17,35 @@ typedef struct produto
 	 int quant_max;
 	 int quant_min;
 } prod;
+
+void atualizarProduto(prod v[], int iCodigo, int proxCodigo)
+{
+	printf("\nDigite o Nome do produto: ");
+	fflush(stdin);
+	gets(v[(iCodigo-1)].nome);						
+	printf("Digite a Quantidade Atual do produto: ");
+	fflush(stdin);
+	scanf("%i",&v[(iCodigo-1)].quant_atual);				
+	printf("Digite a Quantidade Maxima do produto: ");
+	fflush(stdin);
+	scanf("%i",&v[(iCodigo-1)].quant_max);								
+	printf("Digite a Quantidade Minima do produto: ");
+	fflush(stdin);
+	scanf("%i",&v[(iCodigo-1)].quant_min);
+	fflush(stdin);
+	
+	FILE *arquivo;
+	arquivo = fopen("produtos.txt", "w");
+	if(arquivo == NULL)
+	{
+		printf("Erro ao tentar encontrar o arquivo produtos.txt! Por favor contate um desenvolvedor.\n\n");
+	} 
+	else 
+	{
+		fwrite(v, sizeof(prod), (proxCodigo-1), arquivo);
+	}
+	fclose(arquivo);
+}
 
 void cadastrarProduto(int proxCodigo) 
 {
@@ -55,7 +88,7 @@ int main(int argc, char *argv[])
 	do
 	{
 		fflush(stdin);
-		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Cadastrar Uso/Adicao.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
+		printf("Bem vindo ao setor de Almoxarifado. Qual caminho deseja seguir?\n\t1- Cadastrar novo Produto.\n\t2- Atualizar Produto.\n\t3- Visualizar Todos os Produtos.\n\t4- Visualizar Produto em Falta.\n\t5- Sair.\n\nDigite 1, 2, 3, 4 ou 5: ");
 		scanf("%c", &selecao);
 		while(isdigit(selecao) == 0)
 		{
@@ -102,7 +135,7 @@ int main(int argc, char *argv[])
 					cadastrarProduto(proxCodigo);
 					proxCodigo++;	
 										
-					printf("Deseja Cadastrar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
+					printf("\nDeseja cadastrar mais um produto?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
 					scanf("%c", &selecao2);
 					while(isdigit(selecao2) == 0 || (isdigit(selecao2) != 0 && (selecao2 != '1' && selecao2 != '2')))
 					{
@@ -131,7 +164,7 @@ int main(int argc, char *argv[])
 			fclose(arquivo);
 			if(iSelecao == 2 || iSelecao == 3)
 			{
-				//2- Cadastrar Uso/Adicao || Vizualizar todos os produtos				
+				//2- Atualizar Produto || Vizualizar todos os produtos				
 				printf("\nEscolha: %i\n\n", iSelecao);
 				printf("\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
 				for(i=0; i<(proxCodigo-1); i++)
@@ -143,8 +176,9 @@ int main(int argc, char *argv[])
 					while (iSelecao3 != 2)
 					{			
 						fflush(stdin);
-						printf("Digite o numero de Id do produto que deseja atualizar: ");
+						printf("\nDigite o numero de Id do produto que deseja atualizar: ");
 						scanf("%c", &codigo);
+						printf("\nEscolha: %c\n", codigo);
 						while(codigoValido == 0)
 						{
 							while(isdigit(codigo) == 0)
@@ -152,7 +186,7 @@ int main(int argc, char *argv[])
 								fflush(stdin);
 								printf("\nPor favor digite um Id valido: ");
 								scanf("%c", &codigo);
-								printf("Escolha: %c\n", codigo);	
+								printf("\nEscolha: %c\n", codigo);	
 							}
 							iCodigo = codigo - '0';
 							if(iCodigo <= 0 || iCodigo > (proxCodigo-1)) 
@@ -163,25 +197,15 @@ int main(int argc, char *argv[])
 							} 
 							else 
 							{
-								printf("\n\n\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
+								printf("\n\tId\tNome\t\tQuant. Atual\tQuant. Maxima\tQuant. Minima\n");
 								printf("\t%i\t%s\t\t%i\t\t%i\t\t%i\n", v[(iCodigo-1)].codigo, v[(iCodigo-1)].nome, v[(iCodigo-1)].quant_atual, v[(iCodigo-1)].quant_max, v[(iCodigo-1)].quant_min);
 								
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								// inserir atualização de produto
-								
+								atualizarProduto(v,iCodigo, proxCodigo);
 								codigoValido = 1;
 							}
 						}
 						fflush(stdin);
-						printf("Deseja atualizar mais um arquivo?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
+						printf("\nDeseja atualizar mais um produto?\n\t1- Sim.\n\t2- Nao\nDigite 1 ou 2: ");
 						scanf("%c", &selecao3);
 						while(isdigit(selecao3) == 0 || (isdigit(selecao3) != 0 && (selecao3 != '1' && selecao3 != '2')))
 						{
@@ -209,7 +233,7 @@ int main(int argc, char *argv[])
 						emFalta++;
 					}
 				}
-				if(emFalta<=0) printf("Nao existem produtos com a quantidade atual menor do que a quantidade minima!\n\n");
+				if(emFalta<=0) printf("Nao existem produtos com a quantidade atual menor ou igual à quantidade minima!\n\n");
 				printf("\nVoltando ao Menu Principal!\n\n");
 			} 
 			else if(iSelecao == 5)
